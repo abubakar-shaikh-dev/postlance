@@ -52,7 +52,7 @@ export async function topUpWallet(amount) {
   // Fire-and-forget: confirm top-up via WhatsApp
   const client = await User.findById(session.userId).select('phone name');
   if (client?.phone) {
-    notifyWalletToppedUp(client.phone, client.name, parsed);
+    await notifyWalletToppedUp(client.phone, client.name, parsed);
   }
 
   return { success: true, message: `₹${parsed} added to wallet.` };
@@ -198,7 +198,7 @@ export async function sendMoney({ studentId, amount, projectId }) {
 
   // Fire-and-forget: notify the student via WhatsApp
   if (student.phone) {
-    notifyPaymentReceived(student.phone, student.name, parsed, project.title);
+    await notifyPaymentReceived(student.phone, student.name, parsed, project.title);
   }
 
   return {

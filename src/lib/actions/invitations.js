@@ -49,7 +49,7 @@ export async function inviteStudent({ studentId, projectId, message }) {
   // Fire-and-forget: notify the student via WhatsApp
   const client = await User.findById(session.userId).select('name');
   if (student.phone) {
-    notifyInvitationReceived(student.phone, student.name, client?.name || 'A client', project.title);
+    await notifyInvitationReceived(student.phone, student.name, client?.name || 'A client', project.title);
   }
 
   return { success: true, message: `Invitation sent to ${student.name}.` };

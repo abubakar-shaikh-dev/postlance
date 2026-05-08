@@ -64,7 +64,7 @@ export async function submitProposal(data) {
       User.findById(session.userId).select('name'),
     ]);
     if (client?.phone) {
-      notifyNewProposal(client.phone, client.name, project.title);
+      await notifyNewProposal(client.phone, client.name, project.title);
     }
 
     return { success: true, message: 'Proposal submitted successfully!' };
@@ -161,9 +161,9 @@ export async function reviewProposal(proposalId, status) {
   if (studentUser?.phone) {
     const projectTitle = proposal.projectId.title;
     if (status === 'accepted') {
-      notifyProposalAccepted(studentUser.phone, studentUser.name, projectTitle);
+      await notifyProposalAccepted(studentUser.phone, studentUser.name, projectTitle);
     } else {
-      notifyProposalDeclined(studentUser.phone, studentUser.name, projectTitle);
+      await notifyProposalDeclined(studentUser.phone, studentUser.name, projectTitle);
     }
   }
 

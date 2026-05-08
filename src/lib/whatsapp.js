@@ -1,14 +1,14 @@
 import twilio from 'twilio';
 
-const TWILIO_SID = process.env.TWILLIO_SID;
-const TWILIO_AUTH_TOKEN = process.env.TWILLIO_AUTH_TOKEN;
-const WHATSAPP_FROM = 'whatsapp:+14155238886'; // Twilio WhatsApp sandbox number
+const TWILLIO_SID = process.env.TWILLIO_SID;
+const TWILLIO_AUTH_TOKEN = process.env.TWILLIO_AUTH_TOKEN;
+const WHATSAPP_FROM = 'whatsapp:+18148853925'; // Twilio WhatsApp sandbox number
 
 let client = null;
 function getClient() {
-  if (!TWILIO_SID || !TWILIO_AUTH_TOKEN) return null;
+  if (!TWILLIO_SID || !TWILLIO_AUTH_TOKEN) return null;
   if (!client) {
-    client = twilio(TWILIO_SID, TWILIO_AUTH_TOKEN);
+    client = twilio(TWILLIO_SID, TWILLIO_AUTH_TOKEN);
   }
   return client;
 }
