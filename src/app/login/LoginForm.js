@@ -8,10 +8,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { useState } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Eye, EyeOff } from 'lucide-react';
 
 export function LoginForm() {
   const [serverError, setServerError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const form = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' },
@@ -64,11 +65,22 @@ export function LoginForm() {
                   </a>
                 </div>
                 <FormControl>
-                  <Input 
-                    {...field} 
-                    type="password" 
-                    placeholder="••••••••" 
-                  />
+                  <div className="relative">
+                    <Input
+                      {...field}
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="••••••••"
+                      className="pr-10"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#999] hover:text-[#666666] transition-colors"
+                      tabIndex={-1}
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
