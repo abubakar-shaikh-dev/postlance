@@ -1,26 +1,123 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter), sans-serif;
+  --font-heading: var(--font-inter), sans-serif;
+  
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+
+  /* Tailscale inspired colors */
+  --color-brand-primary: #d04841;
+  --color-brand-secondary: #5a82de;
+  --color-brand-bg: #f9f7f6;
+  --color-brand-card: #2e2d2d;
+  --color-brand-text: #181717;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-3xl: 32px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  --background: #f9f7f6;
+  --foreground: #181717;
+  --card: #ffffff;
+  --card-foreground: #181717;
+  --popover: #ffffff;
+  --popover-foreground: #181717;
+  --primary: #d04841;
+  --primary-foreground: #ffffff;
+  --secondary: #5a82de;
+  --secondary-foreground: #ffffff;
+  --muted: #eeebea;
+  --muted-foreground: #666666;
+  --accent: #eeebea;
+  --accent-foreground: #181717;
+  --destructive: #d04841;
+  --destructive-foreground: #ffffff;
+  --border: #2e2d2d;
+  --input: #2e2d2d;
+  --ring: #d04841;
+  --radius: 0.5rem; /* 8px */
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading tracking-tight;
+    font-weight: 500;
+  }
+  h1 {
+    letter-spacing: -1.44px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  .btn-filled-2 {
+    @apply bg-primary text-white rounded-2xl px-6 py-4 text-base font-normal hover:bg-[#b83b34] transition-colors border-none;
+  }
+  .btn-ghost {
+    @apply bg-transparent text-[#2e2d2d] rounded-2xl px-6 py-4 text-base font-normal hover:bg-black/5 transition-colors border-none;
+  }
+  .btn-pill {
+    @apply bg-[#1f1e1e] text-white rounded-full px-5 py-2 text-sm font-medium border border-[#1f1e1e] hover:bg-black transition-colors;
+  }
+  .btn-pill-2 {
+    @apply bg-white text-[#2e2d2d] rounded-full px-5 py-2 text-sm font-medium border border-[#eeebea] hover:bg-gray-50 transition-colors shadow-sm;
+  }
+  .card-ts {
+    @apply bg-[#2e2d2d] rounded-[32px] p-10 text-white;
+  }
+
+  /* Card entrance animation */
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .animate-fade-in-up {
+    animation: fade-in-up 0.4s ease-out both;
+  }
+
+  /* Legacy utils for other pages to not break */
+  .glass {
+    @apply bg-white/70 backdrop-blur-2xl border border-slate-200/60 shadow-lg shadow-slate-200/50;
+  }
+  .glass-card {
+    @apply bg-white/60 backdrop-blur-xl border border-slate-200/60 shadow-xl shadow-slate-200/40 relative overflow-hidden transition-all duration-500 hover:border-slate-300;
+  }
 }

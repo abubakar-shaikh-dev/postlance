@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e ' *)",
+      "Bash(npm install *)",
+      "Bash(npx shadcn@latest init -d)",
+      "Bash(npx shadcn@latest add card input label textarea badge avatar separator dialog sheet sonner select -y)",
+      "Bash(npx next *)",
+      "Bash(npx shadcn@latest add form --yes)",
+      "Bash(npm run *)",
+      "Bash(node -e \"const pkg = require\\('./node_modules/shadcn/package.json'\\); console.log\\(JSON.stringify\\({exports: pkg.exports, style: pkg.style}, null, 2\\)\\)\")",
+      "Bash(npm i *)",
+      "WebFetch(domain:www.npmjs.com)"
+    ]
+  }
+}
