@@ -8,6 +8,7 @@ import { verifySession } from '@/lib/dal';
 import { projectSchema } from '@/lib/validations';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { notifyProjectStatusChanged } from '@/lib/sms';
 
 export async function createProject(data) {
   const session = await verifySession();
@@ -137,4 +138,13 @@ export async function updateProjectStatus(projectId, newStatus) {
   revalidatePath('/student/dashboard');
   revalidatePath('/projects');
   revalidatePath('/client/wallet');
+
+  // Notify hired student if project status changed and there is a hired student
+  if (project.hiredStudentId) {
+    const student = await User.findById(project.hiredStudentId).select('phone name');
+    if (student?.phone) {
+      const label = { open: 'Open', in_progress: 'In Progress', completed: 'Completed', cancelled: 'Cancelled' };
+      await notifyProjectStatusChanged(student.phone, student.name, project.title, label[newStatus] || newStatus);
+    }
+  }
 }

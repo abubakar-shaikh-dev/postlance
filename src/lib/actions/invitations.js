@@ -7,7 +7,7 @@ import Project from '@/lib/models/Project';
 import User from '@/lib/models/User';
 import { verifySession } from '@/lib/dal';
 import { revalidatePath } from 'next/cache';
-import { notifyInvitationReceived } from '@/lib/sms';
+import { notifyInvitationReceived, notifyInvitationResponded } from '@/lib/sms';
 
 export async function inviteStudent({ studentId, projectId, message }) {
   const session = await verifySession();
@@ -117,6 +117,15 @@ export async function respondToInvitation(invitationId, status) {
 
   revalidatePath('/student/invitations');
   revalidatePath('/student/dashboard');
+
+  // Notify client about the response
+  const [client, student] = await Promise.all([
+    User.findById(invitation.clientId).select('phone name'),
+    User.findById(session.userId).select('name'),
+  ]);
+  if (client?.phone && student) {
+    await notifyInvitationResponded(client.phone, client.name, student.name, status);
+  }
 
   return {
     success: true,

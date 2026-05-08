@@ -2,6 +2,13 @@ const TEXTBEE_BASE = 'https://api.textbee.dev/api/v1';
 const API_KEY = process.env.TEXT_BEE_API_KEY;
 const DEVICE_ID = process.env.TEXT_BEE_DEVICE_ID;
 
+// Log config status once at module load
+if (API_KEY && DEVICE_ID) {
+  console.log('[SMS] TextBee configured — device:', DEVICE_ID);
+} else {
+  console.warn('[SMS] TextBee not configured — missing TEXT_BEE_API_KEY or TEXT_BEE_DEVICE_ID');
+}
+
 function formatPhone(phone) {
   if (!phone) return null;
   let cleaned = phone.replace(/[\s\-\(\)]/g, '');
@@ -13,9 +20,6 @@ function formatPhone(phone) {
 
 /**
  * Send an SMS via TextBee. Fails silently — never throws.
- * @param {string} phone - E.164 phone number (e.g. +919876543210)
- * @param {string} message - SMS body
- * @returns {Promise<boolean>} true if sent, false if skipped/failed
  */
 export async function sendSMS(phone, message) {
   if (!API_KEY || !DEVICE_ID) {
@@ -29,33 +33,32 @@ export async function sendSMS(phone, message) {
     return false;
   }
 
+  const url = `${TEXTBEE_BASE}/gateway/devices/${DEVICE_ID}/send-sms`;
+  const body = { recipients: [to], message };
+
+  console.log(`[SMS] Sending to ${to}: "${message}"`);
+
   try {
-    const res = await fetch(
-      `${TEXTBEE_BASE}/gateway/devices/${DEVICE_ID}/send-sms`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': API_KEY,
-        },
-        body: JSON.stringify({
-          recipients: [to],
-          message,
-        }),
-      }
-    );
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': API_KEY,
+      },
+      body: JSON.stringify(body),
+    });
+
+    const responseText = await res.text();
 
     if (!res.ok) {
-      const errBody = await res.text();
-      console.error(`[SMS] TextBee API error (${res.status}): ${errBody}`);
+      console.error(`[SMS] TextBee error ${res.status}: ${responseText}`);
       return false;
     }
 
-    const data = await res.json();
-    console.log(`[SMS] Message sent to ${to}:`, JSON.stringify(data));
+    console.log(`[SMS] Sent to ${to} — response: ${responseText}`);
     return true;
   } catch (err) {
-    console.error(`[SMS] Failed to send to ${to}:`, err.message);
+    console.error(`[SMS] Network error sending to ${to}:`, err.message);
     return false;
   }
 }
@@ -101,5 +104,27 @@ export async function notifyWalletToppedUp(clientPhone, clientName, amount) {
   return sendSMS(
     clientPhone,
     `Wallet topped up! Rs.${amount.toLocaleString()} added to your PostLance wallet.`
+  );
+}
+
+export async function notifyWithdrawalConfirmed(studentPhone, studentName, amount) {
+  return sendSMS(
+    studentPhone,
+    `${studentName}, withdrawal of Rs.${amount.toLocaleString()} confirmed. Your PostLance wallet has been debited.`
+  );
+}
+
+export async function notifyProjectStatusChanged(studentPhone, studentName, projectTitle, newStatus) {
+  return sendSMS(
+    studentPhone,
+    `${studentName}, your project "${projectTitle}" is now ${newStatus}. Check your PostLance dashboard.`
+  );
+}
+
+export async function notifyInvitationResponded(clientPhone, clientName, studentName, status) {
+  const action = status === 'accepted' ? 'accepted' : 'declined';
+  return sendSMS(
+    clientPhone,
+    `${clientName}, ${studentName} has ${action} your invitation. Check your PostLance dashboard.`
   );
 }

@@ -6,7 +6,7 @@ import Project from '@/lib/models/Project';
 import User from '@/lib/models/User';
 import { verifySession } from '@/lib/dal';
 import { revalidatePath } from 'next/cache';
-import { notifyPaymentReceived, notifyWalletToppedUp } from '@/lib/sms';
+import { notifyPaymentReceived, notifyWalletToppedUp, notifyWithdrawalConfirmed } from '@/lib/sms';
 
 async function getOrCreateWallet(userId) {
   let wallet = await Wallet.findOne({ userId });
@@ -235,6 +235,12 @@ export async function withdrawMoney(amount) {
   await wallet.save();
 
   revalidatePath('/student/wallet');
+
+  const student = await User.findById(session.userId).select('phone name');
+  if (student?.phone) {
+    await notifyWithdrawalConfirmed(student.phone, student.name, parsed);
+  }
+
   return { success: true, message: `₹${parsed} withdrawn successfully.` };
 }
 
