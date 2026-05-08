@@ -7,7 +7,7 @@ import Project from '@/lib/models/Project';
 import User from '@/lib/models/User';
 import { verifySession } from '@/lib/dal';
 import { revalidatePath } from 'next/cache';
-import { notifyInvitationReceived } from '@/lib/whatsapp';
+import { notifyInvitationReceived } from '@/lib/sms';
 
 export async function inviteStudent({ studentId, projectId, message }) {
   const session = await verifySession();

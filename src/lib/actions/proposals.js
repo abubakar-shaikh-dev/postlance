@@ -7,7 +7,7 @@ import User from '@/lib/models/User'; // Required for populate('studentId')
 import { verifySession } from '@/lib/dal';
 import { proposalSchema } from '@/lib/validations';
 import { revalidatePath } from 'next/cache';
-import { notifyProposalAccepted, notifyProposalDeclined, notifyNewProposal } from '@/lib/whatsapp';
+import { notifyProposalAccepted, notifyProposalDeclined, notifyNewProposal } from '@/lib/sms';
 
 export async function submitProposal(data) {
   const session = await verifySession();

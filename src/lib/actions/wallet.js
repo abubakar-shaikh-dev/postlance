@@ -6,7 +6,7 @@ import Project from '@/lib/models/Project';
 import User from '@/lib/models/User';
 import { verifySession } from '@/lib/dal';
 import { revalidatePath } from 'next/cache';
-import { notifyPaymentReceived, notifyWalletToppedUp } from '@/lib/whatsapp';
+import { notifyPaymentReceived, notifyWalletToppedUp } from '@/lib/sms';
 
 async function getOrCreateWallet(userId) {
   let wallet = await Wallet.findOne({ userId });
@@ -126,7 +126,7 @@ export async function sendMoney({ studentId, amount, projectId }) {
       },
       $set: { updatedAt: new Date() },
     },
-    { new: true }
+    { returnDocument: 'after' }
   );
 
   if (!debitResult) {
