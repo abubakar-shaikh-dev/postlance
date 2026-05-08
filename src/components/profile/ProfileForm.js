@@ -219,27 +219,30 @@ export function ProfileForm({ profile, role = 'student' }) {
                 </div>
               </div>
             ) : (
-              /* ─── Client: single-column, essentials only ─── */
-              <div className="max-w-xl space-y-8">
+              /* ─── Client: centered single-column ─── */
+              <div className="max-w-lg mx-auto text-center space-y-8">
+                <p className="text-[14px] text-[#666666]">
+                  Keep your profile up to date so freelancers know who they&apos;re working with.
+                </p>
                 <FormField control={form.control} name="name" render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="text-left">
                     <FormLabel className="text-[16px] font-medium text-[#181717]">Full Name</FormLabel>
                     <FormControl><Input {...field} placeholder="e.g. John Doe" /></FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
                 <FormField control={form.control} name="bio" render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="text-left">
                     <FormLabel className="text-[16px] font-medium text-[#181717]">Bio</FormLabel>
                     <FormControl><Textarea {...field} placeholder="Tell freelancers about yourself and the kind of work you post..." className="min-h-[140px]" /></FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
                 <FormField control={form.control} name="phone" render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="text-left">
                     <FormLabel className="text-[16px] font-medium text-[#181717]">WhatsApp Phone</FormLabel>
                     <FormControl><Input {...field} placeholder="+919876543210" /></FormControl>
-                    <p className="text-[12px] text-[#666666] mt-1">For WhatsApp notifications. Include country code.</p>
+                    <p className="text-[12px] text-[#666666] mt-1">For SMS notifications. Include country code.</p>
                     <FormMessage />
                   </FormItem>
                 )} />
