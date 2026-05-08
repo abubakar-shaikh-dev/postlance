@@ -16,7 +16,7 @@ export async function updateProfile(data) {
     education: data.education || undefined,
     university: data.university || undefined,
     portfolioLinks: data.portfolioLinks || [],
-    phone: data.phone || undefined,
+    phone: data.phone != null ? String(data.phone).trim() : undefined,
   });
 
   if (!validated.success) {

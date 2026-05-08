@@ -11,7 +11,6 @@ export function ClientProfileView({ profile, activeProjects, completedProjects, 
   const identifier = profile?.email || profile?.name || 'user';
   const name = profile?.name || 'Client';
   const bio = profile?.bio || '';
-  const skills = profile?.skills || [];
   const phone = profile?.phone || '';
   const memberSince = profile?.createdAt
     ? new Date(profile.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' })
@@ -107,25 +106,8 @@ export function ClientProfileView({ profile, activeProjects, completedProjects, 
         </div>
       </div>
 
-      {/* Skills / Expertise */}
-      {skills.length > 0 && (
-        <div className="bg-white rounded-[24px] border border-border/10 p-8">
-          <h2 className="text-[20px] font-medium text-[#181717] mb-5">Industry & Expertise</h2>
-          <div className="flex flex-wrap gap-2">
-            {skills.map((skill) => (
-              <span
-                key={skill}
-                className="px-3 py-1.5 rounded-lg bg-[#f9f7f6] text-[#181717] text-[14px] font-medium border border-[#eeebea]"
-              >
-                {skill}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* Empty state */}
-      {!bio && !skills.length && (
+      {!bio && (
         <div className="bg-white rounded-[24px] border border-border/10 p-12 text-center">
           <div className="h-14 w-14 bg-[#f9f7f6] rounded-full flex items-center justify-center mx-auto mb-4">
             <Edit3 className="h-7 w-7 text-[#666666]" />

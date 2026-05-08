@@ -12,11 +12,12 @@ import { X, Plus, Trash2, ArrowLeft, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
-export function ProfileForm({ profile }) {
+export function ProfileForm({ profile, role = 'student' }) {
   const router = useRouter();
   const [serverError, setServerError] = useState('');
   const [skillInput, setSkillInput] = useState('');
   const [linkInput, setLinkInput] = useState('');
+  const isStudent = role === 'student';
 
   const form = useForm({
     resolver: zodResolver(profileSchema),
@@ -130,167 +131,120 @@ export function ProfileForm({ profile }) {
           )}
 
           <div className="bg-white rounded-[32px] p-8 md:p-12 border border-border/20 shadow-sm">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-
-              {/* Left Column */}
-              <div className="space-y-8">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
+            {isStudent ? (
+              /* ─── Student: two-column layout ─── */
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div className="space-y-8">
+                  <FormField control={form.control} name="name" render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-[16px] font-medium text-[#181717]">Full Name</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="e.g. John Doe" />
-                      </FormControl>
+                      <FormControl><Input {...field} placeholder="e.g. John Doe" /></FormControl>
                       <FormMessage />
                     </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="bio"
-                  render={({ field }) => (
+                  )} />
+                  <FormField control={form.control} name="bio" render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-[16px] font-medium text-[#181717]">Bio</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          {...field}
-                          placeholder="Tell others about yourself..."
-                          className="min-h-[160px]"
-                        />
-                      </FormControl>
+                      <FormControl><Textarea {...field} placeholder="Tell others about yourself..." className="min-h-[160px]" /></FormControl>
                       <FormMessage />
                     </FormItem>
-                  )}
-                />
-
-                {/* Phone */}
-                <FormField
-                  control={form.control}
-                  name="phone"
-                  render={({ field }) => (
+                  )} />
+                  <FormField control={form.control} name="phone" render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-[16px] font-medium text-[#181717]">
-                        WhatsApp Phone
-                      </FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="+919876543210" />
-                      </FormControl>
-                      <p className="text-[12px] text-[#666666] mt-1">
-                        For WhatsApp notifications. Include country code.
-                      </p>
+                      <FormLabel className="text-[16px] font-medium text-[#181717]">WhatsApp Phone</FormLabel>
+                      <FormControl><Input {...field} placeholder="+919876543210" /></FormControl>
+                      <p className="text-[12px] text-[#666666] mt-1">For WhatsApp notifications. Include country code.</p>
                       <FormMessage />
                     </FormItem>
-                  )}
-                />
-              </div>
-
-              {/* Right Column */}
-              <div className="space-y-8">
-                {/* Skills */}
-                <div className="space-y-3">
-                  <FormLabel className="text-[16px] font-medium text-[#181717]">Skills</FormLabel>
-                  <div className="flex gap-2">
-                    <Input
-                      value={skillInput}
-                      onChange={(e) => setSkillInput(e.target.value)}
-                      placeholder="e.g. React, Figma"
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') { e.preventDefault(); addSkill(); }
-                      }}
-                    />
-                    <button
-                      type="button"
-                      onClick={addSkill}
-                      className="bg-[#eeebea] text-[#181717] hover:bg-black/10 px-4 rounded-xl flex items-center justify-center transition-colors"
-                    >
-                      <Plus className="h-5 w-5" />
-                    </button>
-                  </div>
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    {skills.map((skill, index) => (
-                      <div key={`${skill}-${index}`} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#eeebea] text-[#181717] text-[14px] font-medium">
-                        {skill}
-                        <button type="button" onClick={() => removeSkill(index)} className="hover:text-destructive transition-colors">
-                          <X className="h-4 w-4" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                  {form.formState.errors.skills?.message && (
-                    <p className="text-sm font-medium text-destructive">{form.formState.errors.skills.message}</p>
-                  )}
+                  )} />
                 </div>
 
-                {/* Education */}
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="education"
-                    render={({ field }) => (
+                <div className="space-y-8">
+                  <div className="space-y-3">
+                    <FormLabel className="text-[16px] font-medium text-[#181717]">Skills</FormLabel>
+                    <div className="flex gap-2">
+                      <Input value={skillInput} onChange={(e) => setSkillInput(e.target.value)} placeholder="e.g. React, Figma"
+                        onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addSkill(); } }} />
+                      <button type="button" onClick={addSkill} className="bg-[#eeebea] text-[#181717] hover:bg-black/10 px-4 rounded-xl flex items-center justify-center transition-colors">
+                        <Plus className="h-5 w-5" />
+                      </button>
+                    </div>
+                    <div className="flex flex-wrap gap-2 pt-2">
+                      {skills.map((skill, index) => (
+                        <div key={`${skill}-${index}`} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#eeebea] text-[#181717] text-[14px] font-medium">
+                          {skill}
+                          <button type="button" onClick={() => removeSkill(index)} className="hover:text-destructive transition-colors"><X className="h-4 w-4" /></button>
+                        </div>
+                      ))}
+                    </div>
+                    {form.formState.errors.skills?.message && <p className="text-sm font-medium text-destructive">{form.formState.errors.skills.message}</p>}
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField control={form.control} name="education" render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-[16px] font-medium text-[#181717]">Education</FormLabel>
-                        <FormControl>
-                          <Input {...field} placeholder="e.g. B.S. Computer Science" />
-                        </FormControl>
+                        <FormControl><Input {...field} placeholder="e.g. B.S. Computer Science" /></FormControl>
                         <FormMessage />
                       </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="university"
-                    render={({ field }) => (
+                    )} />
+                    <FormField control={form.control} name="university" render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-[16px] font-medium text-[#181717]">University</FormLabel>
-                        <FormControl>
-                          <Input {...field} placeholder="e.g. MIT" />
-                        </FormControl>
+                        <FormControl><Input {...field} placeholder="e.g. MIT" /></FormControl>
                         <FormMessage />
                       </FormItem>
-                    )}
-                  />
-                </div>
-
-                {/* Links */}
-                <div className="space-y-3">
-                  <FormLabel className="text-[16px] font-medium text-[#181717]">Portfolio Links</FormLabel>
-                  <div className="flex gap-2">
-                    <Input
-                      value={linkInput}
-                      onChange={(e) => setLinkInput(e.target.value)}
-                      placeholder="https://github.com/you"
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') { e.preventDefault(); addLink(); }
-                      }}
-                    />
-                    <button
-                      type="button"
-                      onClick={addLink}
-                      className="bg-[#eeebea] text-[#181717] hover:bg-black/10 px-4 rounded-xl flex items-center justify-center transition-colors"
-                    >
-                      <Plus className="h-5 w-5" />
-                    </button>
+                    )} />
                   </div>
-                  <div className="space-y-2 pt-2">
-                    {portfolioLinks.map((link, index) => (
-                      <div key={`${link}-${index}`} className="flex items-center gap-2 text-[14px] text-[#666666] bg-[#f9f7f6] px-4 py-2 rounded-xl">
-                        <span className="truncate flex-1">{link}</span>
-                        <button type="button" onClick={() => removeLink(index)} className="hover:text-destructive text-[#181717] transition-colors p-1 rounded-full hover:bg-black/5">
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                  {form.formState.errors.portfolioLinks?.message && (
-                    <p className="text-sm font-medium text-destructive">{form.formState.errors.portfolioLinks.message}</p>
-                  )}
-                </div>
 
+                  <div className="space-y-3">
+                    <FormLabel className="text-[16px] font-medium text-[#181717]">Portfolio Links</FormLabel>
+                    <div className="flex gap-2">
+                      <Input value={linkInput} onChange={(e) => setLinkInput(e.target.value)} placeholder="https://github.com/you"
+                        onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addLink(); } }} />
+                      <button type="button" onClick={addLink} className="bg-[#eeebea] text-[#181717] hover:bg-black/10 px-4 rounded-xl flex items-center justify-center transition-colors">
+                        <Plus className="h-5 w-5" />
+                      </button>
+                    </div>
+                    <div className="space-y-2 pt-2">
+                      {portfolioLinks.map((link, index) => (
+                        <div key={`${link}-${index}`} className="flex items-center gap-2 text-[14px] text-[#666666] bg-[#f9f7f6] px-4 py-2 rounded-xl">
+                          <span className="truncate flex-1">{link}</span>
+                          <button type="button" onClick={() => removeLink(index)} className="hover:text-destructive text-[#181717] transition-colors p-1 rounded-full hover:bg-black/5"><Trash2 className="h-4 w-4" /></button>
+                        </div>
+                      ))}
+                    </div>
+                    {form.formState.errors.portfolioLinks?.message && <p className="text-sm font-medium text-destructive">{form.formState.errors.portfolioLinks.message}</p>}
+                  </div>
+                </div>
               </div>
-            </div>
+            ) : (
+              /* ─── Client: single-column, essentials only ─── */
+              <div className="max-w-xl space-y-8">
+                <FormField control={form.control} name="name" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-[16px] font-medium text-[#181717]">Full Name</FormLabel>
+                    <FormControl><Input {...field} placeholder="e.g. John Doe" /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <FormField control={form.control} name="bio" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-[16px] font-medium text-[#181717]">Bio</FormLabel>
+                    <FormControl><Textarea {...field} placeholder="Tell freelancers about yourself and the kind of work you post..." className="min-h-[140px]" /></FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+                <FormField control={form.control} name="phone" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-[16px] font-medium text-[#181717]">WhatsApp Phone</FormLabel>
+                    <FormControl><Input {...field} placeholder="+919876543210" /></FormControl>
+                    <p className="text-[12px] text-[#666666] mt-1">For WhatsApp notifications. Include country code.</p>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+              </div>
+            )}
           </div>
         </form>
       </Form>
