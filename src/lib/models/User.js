@@ -5,6 +5,12 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
   password: { type: String, required: true },
   role: { type: String, enum: ['student', 'client'], required: true },
+  roles: {
+    type: [{ type: String, enum: ['student', 'client'] }],
+    default: function () {
+      return this.role ? [this.role] : [];
+    },
+  },
   skills: [{ type: String, trim: true }],
   bio: { type: String, default: '' },
   education: { type: String, default: '' },

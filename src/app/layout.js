@@ -1,6 +1,8 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
+// Components
 import { Toaster } from "@/components/ui/sonner";
+import NextTopLoader from 'nextjs-toploader';
 import { ThemeProvider } from "next-themes";
 
 const inter = Inter({
@@ -22,7 +24,8 @@ export default function RootLayout({ children }) {
       className={`${inter.variable} antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-screen bg-background font-sans text-foreground selection:bg-[#d04841] selection:text-white">
+      <body className="min-h-screen bg-background font-sans text-foreground selection:bg-[#d04841] selection:text-white pb-16 md:pb-0">
+        <NextTopLoader color="#d04841" showSpinner={false} />
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

@@ -5,12 +5,13 @@ import { EditProjectForm } from './EditProjectForm';
 
 export default async function EditProjectPage({ params }) {
   const session = await verifySession();
+  const { id } = await params;
   
   if (!session || session.role !== 'client') {
     redirect('/login');
   }
 
-  const project = await getProjectById(params.id);
+  const project = await getProjectById(id);
 
   if (!project) {
     redirect('/projects');

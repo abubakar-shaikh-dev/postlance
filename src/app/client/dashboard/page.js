@@ -11,14 +11,15 @@ export default async function ClientDashboardPage() {
 
   await connectDB();
 
-  const [projects, proposalCounts] = await Promise.all([
-    Project.find({ clientId: session.userId })
-      .sort({ createdAt: -1 })
-      .lean(),
-    Proposal.aggregate([
-      { $match: { projectId: { $exists: true } } },
-      { $group: { _id: '$projectId', count: { $sum: 1 } } },
-    ]),
+  const projects = await Project.find({ clientId: session.userId })
+    .sort({ createdAt: -1 })
+    .lean();
+
+  const projectIds = projects.map(p => p._id);
+
+  const proposalCounts = await Proposal.aggregate([
+    { $match: { projectId: { $in: projectIds } } },
+    { $group: { _id: '$projectId', count: { $sum: 1 } } },
   ]);
 
   const countsMap = {};

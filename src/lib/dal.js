@@ -17,6 +17,7 @@ export const verifySession = cache(async () => {
     isAuth: true,
     userId: session.userId,
     role: session.role,
+    roles: session.roles || [session.role],
     reliabilityScore: session.reliabilityScore || 0,
   };
 });
@@ -34,6 +35,7 @@ export const getSession = cache(async () => {
     isAuth: true,
     userId: session.userId,
     role: session.role,
+    roles: session.roles || [session.role],
     reliabilityScore: session.reliabilityScore || 0,
   };
 });

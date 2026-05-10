@@ -14,6 +14,7 @@ export const signupSchema = z.object({
 export const loginSchema = z.object({
   email: z.string().email('Please enter a valid email').trim().toLowerCase(),
   password: z.string().min(1, 'Password is required'),
+  role: z.enum(['student', 'client']).optional(),
 });
 
 export const projectSchema = z.object({
@@ -24,6 +25,16 @@ export const projectSchema = z.object({
   deadline: z.string()
     .refine((val) => !isNaN(Date.parse(val)), 'Invalid date')
     .refine((val) => new Date(val) > new Date(), 'Deadline must be in the future'),
+});
+
+// For editing: deadline is not required to be in the future (it was already set)
+export const editProjectSchema = z.object({
+  title: z.string().min(5, 'Title must be at least 5 characters').trim(),
+  description: z.string().min(20, 'Description must be at least 20 characters').trim(),
+  skillsRequired: z.array(z.string().trim()).min(1, 'At least one skill is required'),
+  budget: z.coerce.number().positive('Budget must be positive'),
+  deadline: z.string()
+    .refine((val) => !isNaN(Date.parse(val)), 'Invalid date'),
 });
 
 export const proposalSchema = z.object({

@@ -5,7 +5,7 @@ import Project from '@/lib/models/Project';
 import Proposal from '@/lib/models/Proposal';
 import User from '@/lib/models/User'; // Required for populate('clientId')
 import { verifySession } from '@/lib/dal';
-import { projectSchema } from '@/lib/validations';
+import { projectSchema, editProjectSchema } from '@/lib/validations';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { notifyProjectStatusChanged } from '@/lib/sms';
@@ -156,7 +156,7 @@ export async function updateProject(projectId, data) {
     return { message: 'Only clients can update projects.' };
   }
 
-  const validated = projectSchema.safeParse({
+  const validated = editProjectSchema.safeParse({
     title: data.title,
     description: data.description,
     skillsRequired: data.skillsRequired || [],
@@ -171,6 +171,8 @@ export async function updateProject(projectId, data) {
     };
   }
 
+  let updatedProjectId;
+
   try {
     await connectDB();
     const project = await Project.findById(projectId);
@@ -181,20 +183,23 @@ export async function updateProject(projectId, data) {
     }
     
     if (project.status !== 'open') {
-      return { message: 'Only open projects can be edited once started.' };
+      return { message: 'Only open projects can be edited.' };
     }
 
     Object.assign(project, validated.data);
+    project.updatedAt = new Date();
     await project.save();
 
+    updatedProjectId = project._id.toString();
     revalidatePath(`/projects/${projectId}`);
-    revalidatePath(`/client/dashboard`);
+    revalidatePath('/client/dashboard');
+    revalidatePath('/projects');
   } catch (error) {
     console.error('Update project error:', error);
     return { message: 'Failed to update project.' };
   }
   
-  redirect(`/projects/${projectId}`);
+  redirect(`/projects/${updatedProjectId}`);
 }
 
 export async function deleteProject(projectId) {

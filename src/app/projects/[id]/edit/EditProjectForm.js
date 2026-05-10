@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { updateProject } from '@/lib/actions/projects';
-import { projectSchema } from '@/lib/validations';
+import { editProjectSchema } from '@/lib/validations';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
@@ -16,7 +16,7 @@ export function EditProjectForm({ project }) {
   const [serverError, setServerError] = useState('');
   const [skillInput, setSkillInput] = useState('');
   const form = useForm({
-    resolver: zodResolver(projectSchema),
+    resolver: zodResolver(editProjectSchema),
     defaultValues: {
       title: project.title || '',
       description: project.description || '',

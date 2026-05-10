@@ -1,14 +1,20 @@
 'use client';
 
+// React & Hooks
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+
+// Utils & Libs
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signup } from '@/lib/actions/auth';
 import { signupSchema } from '@/lib/validations';
-import { Button } from '@/components/ui/button';
+
+// Components
 import { Input } from '@/components/ui/input';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
-import { useState } from 'react';
-import { Loader2, Eye, EyeOff } from 'lucide-react';
+
+// Icons
+import { Loader2, Eye, EyeOff, ChevronDown } from 'lucide-react';
 
 export function RegisterForm() {
   const [serverError, setServerError] = useState('');
@@ -34,20 +40,22 @@ export function RegisterForm() {
   return (
     <div className="w-full">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-foreground/90 font-medium">Full Name</FormLabel>
+              <FormItem className="space-y-1.5">
+                <FormLabel className="text-[#181717] font-medium text-[14px]">Full Name</FormLabel>
                 <FormControl>
                   <Input 
                     {...field} 
                     placeholder="John Doe" 
+                    disabled={form.formState.isSubmitting}
+                    className="h-10 rounded-xl border-border/20 bg-[#f9f7f6] focus-visible:bg-white transition-colors text-[14px]"
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-[13px] font-medium text-destructive" />
               </FormItem>
             )}
           />
@@ -56,16 +64,18 @@ export function RegisterForm() {
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-foreground/90 font-medium">Email address</FormLabel>
+              <FormItem className="space-y-1.5">
+                <FormLabel className="text-[#181717] font-medium text-[14px]">Email address</FormLabel>
                 <FormControl>
                   <Input 
                     {...field} 
                     type="email" 
                     placeholder="you@example.com" 
+                    disabled={form.formState.isSubmitting}
+                    className="h-10 rounded-xl border-border/20 bg-[#f9f7f6] focus-visible:bg-white transition-colors text-[14px]"
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-[13px] font-medium text-destructive" />
               </FormItem>
             )}
           />
@@ -74,27 +84,29 @@ export function RegisterForm() {
             control={form.control}
             name="password"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-foreground/90 font-medium">Password</FormLabel>
+              <FormItem className="space-y-1.5">
+                <FormLabel className="text-[#181717] font-medium text-[14px]">Password</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
                       {...field}
                       type={showPassword ? 'text' : 'password'}
                       placeholder="••••••••"
-                      className="pr-10"
+                      disabled={form.formState.isSubmitting}
+                      className="pr-10 h-10 rounded-xl border-border/20 bg-[#f9f7f6] focus-visible:bg-white transition-colors text-[14px]"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#999] hover:text-[#666666] transition-colors"
+                      disabled={form.formState.isSubmitting}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#666666] hover:text-[#181717] transition-colors disabled:opacity-50"
                       tabIndex={-1}
                     >
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
                   </div>
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-[13px] font-medium text-destructive" />
               </FormItem>
             )}
           />
@@ -103,39 +115,39 @@ export function RegisterForm() {
             control={form.control}
             name="role"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-foreground/90 font-medium">I want to...</FormLabel>
+              <FormItem className="space-y-1.5">
+                <FormLabel className="text-[#181717] font-medium text-[14px]">I want to...</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <select
                       {...field}
-                      className="flex h-12 w-full appearance-none rounded-xl border border-transparent bg-black/5 px-4 py-1 text-[15px] hover:border-black/10 hover:bg-black/10 focus-visible:outline-none focus-visible:border-primary/30 focus-visible:bg-white focus-visible:ring-4 focus-visible:ring-primary/10 transition-colors cursor-pointer"
+                      disabled={form.formState.isSubmitting}
+                      className="flex h-10 w-full appearance-none rounded-xl border border-transparent bg-[#f9f7f6] px-4 py-1 text-[14px] hover:bg-[#eeebea] focus-visible:outline-none focus-visible:bg-white focus-visible:ring-1 focus-visible:ring-border/20 transition-colors cursor-pointer disabled:opacity-50 text-[#181717]"
                     >
                       <option value="" disabled hidden>Select your role</option>
                       <option value="student">Find work as a Student</option>
                       <option value="client">Hire talent as a Client</option>
                     </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center px-2 text-muted-foreground">
-                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                      </svg>
+                    <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center px-2 text-[#666666]">
+                      <ChevronDown className="h-4 w-4" />
                     </div>
                   </div>
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-[13px] font-medium text-destructive" />
               </FormItem>
             )}
           />
 
           {serverError && (
-            <div className="p-3 text-sm font-medium text-destructive bg-destructive/10 border border-destructive/20 rounded-md">
+            <div className="p-2.5 text-[13px] font-medium text-[#d04841] bg-[#ffd3cf] rounded-xl flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#d04841] shrink-0" />
               {serverError}
             </div>
           )}
 
-          <Button
+          <button
             type="submit"
-            className="w-full h-11 mt-2 text-base font-medium"
+            className="w-full h-10 text-[15px] font-medium btn-filled-2 flex items-center justify-center mt-1 group"
             disabled={form.formState.isSubmitting}
           >
             {form.formState.isSubmitting ? (
@@ -146,7 +158,7 @@ export function RegisterForm() {
             ) : (
               'Create Account'
             )}
-          </Button>
+          </button>
         </form>
       </Form>
     </div>

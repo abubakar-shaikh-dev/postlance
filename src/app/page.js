@@ -192,9 +192,9 @@ function FeaturesGrid() {
 
 function Footer() {
   return (
-    <footer className="bg-white py-16 border-t border-border/20">
-      <div className="w-full mx-auto px-4 md:px-8 max-w-7xl flex flex-col md:flex-row justify-between items-center gap-8">
-        <div className="flex items-center gap-3">
+    <footer className="bg-white pt-16 pb-8 border-t border-border/20">
+      <div className="w-full mx-auto px-4 md:px-8 max-w-7xl flex flex-col md:flex-row justify-between items-center gap-8 mb-12">
+        <div className="flex flex-col items-center md:items-start gap-4">
           <Image
             src="/logo.svg"
             alt="PostLance Logo"
@@ -202,25 +202,33 @@ function Footer() {
             height={32}
             className="h-8 w-auto grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all"
           />
+          <p className="text-[14px] text-[#666666] max-w-xs text-center md:text-left">
+            A zero-friction, identity-based connection platform connecting ambitious students directly with fast-growing startups.
+          </p>
         </div>
 
         <div className="flex gap-8 text-[15px] font-medium text-[#666666]">
-          <Link href="#" className="hover:text-[#181717] transition-colors">
-            Platform
-          </Link>
-          <Link href="#" className="hover:text-[#181717] transition-colors">
-            Privacy
-          </Link>
-          <Link href="#" className="hover:text-[#181717] transition-colors">
-            Terms
-          </Link>
-          <Link href="#" className="hover:text-[#181717] transition-colors">
-            Contact
-          </Link>
+          <Link href="#" className="hover:text-[#181717] transition-colors">Platform</Link>
+          <Link href="#" className="hover:text-[#181717] transition-colors">Privacy</Link>
+          <Link href="#" className="hover:text-[#181717] transition-colors">Terms</Link>
+          <Link href="#" className="hover:text-[#181717] transition-colors">Contact</Link>
         </div>
-
-        <p className="text-[14px] text-[#666666] font-normal">
-          &copy; {new Date().getFullYear()} PostLance Inc.
+      </div>
+      
+      <div className="w-full mx-auto px-4 md:px-8 max-w-7xl pt-8 border-t border-border/10 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p className="text-[14px] text-[#999999]">
+          &copy; {new Date().getFullYear()} PostLance. All rights reserved.
+        </p>
+        <p className="text-[14px] text-[#999999]">
+          Designed & Developed by{' '}
+          <a
+            href="https://abubakarshaikh.dev"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium text-[#666666] hover:text-[#d04841] transition-colors"
+          >
+            Abubakar Shaikh
+          </a>
         </p>
       </div>
     </footer>
