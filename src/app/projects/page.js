@@ -24,7 +24,7 @@ export default async function ProjectsPage({ searchParams }) {
   }
 
   return (
-    <div className="w-full py-12 px-4 md:px-12 max-w-7xl mx-auto">
+    <div className="w-full py-12 px-4 md:px-8 max-w-7xl mx-auto">
       <div className="flex flex-col gap-6 mb-10 pb-8 border-b border-border/10">
         <div>
           <h1 className="text-4xl md:text-[48px] font-medium text-[#181717] tracking-tight leading-tight mb-2">Browse Projects</h1>

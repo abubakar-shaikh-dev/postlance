@@ -1,17 +1,35 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import CountUp from 'react-countup';
-import { useIsMobile } from '@/hooks/useMediaQuery';
-import { Briefcase, Clock, Star, ArrowRight, FileText, CheckCircle2, Wallet, Mail, Sparkles, ChevronRight, User } from 'lucide-react';
+import Link from "next/link";
+import CountUp from "react-countup";
+import { useIsMobile } from "@/hooks/useMediaQuery";
+import {
+  Briefcase,
+  Clock,
+  Star,
+  ArrowRight,
+  FileText,
+  CheckCircle2,
+  Wallet,
+  Mail,
+  Sparkles,
+  ChevronRight,
+  User,
+} from "lucide-react";
+import { WithdrawProposalButton } from "./WithdrawProposalButton";
 
 function AIMatchBar({ score }) {
   if (score == null) return null;
   const pct = Math.min(100, Math.max(0, score));
-  let color = '#22c55e';
-  let bg = '#cbf4c9';
-  if (pct < 50) { color = '#ef4444'; bg = '#ffd3cf'; }
-  else if (pct < 75) { color = '#f59e0b'; bg = '#f8e5b9'; }
+  let color = "#22c55e";
+  let bg = "#cbf4c9";
+  if (pct < 50) {
+    color = "#ef4444";
+    bg = "#ffd3cf";
+  } else if (pct < 75) {
+    color = "#f59e0b";
+    bg = "#f8e5b9";
+  }
 
   return (
     <div className="flex items-center gap-2">
@@ -21,7 +39,10 @@ function AIMatchBar({ score }) {
           style={{ width: `${pct}%`, backgroundColor: color }}
         />
       </div>
-      <span className="text-[12px] font-semibold tabular-nums" style={{ color }}>
+      <span
+        className="text-[12px] font-semibold tabular-nums"
+        style={{ color }}
+      >
         {pct}%
       </span>
     </div>
@@ -29,20 +50,37 @@ function AIMatchBar({ score }) {
 }
 
 const statusConfig = {
-  pending:  { bg: '#f8e5b9', text: '#78350f', dot: '#f59e0b', label: 'Pending' },
-  accepted: { bg: '#cbf4c9', text: '#14532d', dot: '#22c55e', label: 'Accepted' },
-  rejected: { bg: '#ffd3cf', text: '#b91c1c', dot: '#ef4444', label: 'Rejected' },
+  pending: { bg: "#f8e5b9", text: "#78350f", dot: "#f59e0b", label: "Pending" },
+  accepted: {
+    bg: "#cbf4c9",
+    text: "#14532d",
+    dot: "#22c55e",
+    label: "Accepted",
+  },
+  rejected: {
+    bg: "#ffd3cf",
+    text: "#b91c1c",
+    dot: "#ef4444",
+    label: "Rejected",
+  },
 };
 
-export function StudentDashboardClient({ proposals, availableProjects, session, invitationCount = 0 }) {
+export function StudentDashboardClient({
+  proposals,
+  availableProjects,
+  session,
+  invitationCount = 0,
+}) {
   const isMobile = useIsMobile();
-  const pendingCount = proposals.filter((p) => p.status === 'pending').length;
-  const acceptedCount = proposals.filter((p) => p.status === 'accepted').length;
+  const pendingCount = proposals.filter((p) => p.status === "pending").length;
+  const acceptedCount = proposals.filter((p) => p.status === "accepted").length;
 
   return (
-    <div className="container mx-auto py-12 px-4 md:px-8 max-w-7xl">
+    <div className="w-full mx-auto py-12 px-4 md:px-8 max-w-7xl">
       {/* Header */}
-      <div className={`flex ${isMobile ? 'flex-col gap-6' : 'justify-between items-end'} mb-14`}>
+      <div
+        className={`flex ${isMobile ? "flex-col gap-6" : "justify-between items-end"} mb-14`}
+      >
         <div className="space-y-3">
           <div className="inline-flex items-center px-4 py-2 bg-[#cedefd] text-[#181717] rounded-full text-[13px] font-medium">
             <Sparkles className="h-4 w-4 mr-2" />
@@ -101,7 +139,9 @@ export function StudentDashboardClient({ proposals, availableProjects, session, 
               <Clock className="h-5 w-5 text-[#d97706]" />
             </div>
             <p className="text-[14px] font-medium text-[#666666] leading-tight">
-              Pending<br />Proposals
+              Pending
+              <br />
+              Proposals
             </p>
           </div>
           <p className="text-[40px] font-medium text-[#181717] leading-none tabular-nums">
@@ -116,7 +156,9 @@ export function StudentDashboardClient({ proposals, availableProjects, session, 
               <CheckCircle2 className="h-5 w-5 text-[#166534]" />
             </div>
             <p className="text-[14px] font-medium text-[#666666] leading-tight">
-              Accepted<br />Projects
+              Accepted
+              <br />
+              Projects
             </p>
           </div>
           <p className="text-[40px] font-medium text-[#181717] leading-none tabular-nums">
@@ -131,7 +173,9 @@ export function StudentDashboardClient({ proposals, availableProjects, session, 
               <Briefcase className="h-5 w-5 text-[#5a82de]" />
             </div>
             <p className="text-[14px] font-medium text-[#666666] leading-tight">
-              Open<br />Projects
+              Open
+              <br />
+              Projects
             </p>
           </div>
           <p className="text-[40px] font-medium text-[#181717] leading-none tabular-nums">
@@ -148,14 +192,18 @@ export function StudentDashboardClient({ proposals, availableProjects, session, 
                 <Star className="h-5 w-5 text-[#93c5fd]" />
               </div>
               <p className="text-[14px] font-medium text-[#a8a29e] leading-tight">
-                Reliability<br />Score
+                Reliability
+                <br />
+                Score
               </p>
             </div>
             <div className="flex items-baseline gap-2">
               <p className="text-[40px] font-medium text-white leading-none tabular-nums">
                 <CountUp end={session.reliabilityScore || 0} duration={1.5} />
               </p>
-              <span className="text-[#a8a29e] font-medium text-[15px]">/ 100</span>
+              <span className="text-[#a8a29e] font-medium text-[15px]">
+                / 100
+              </span>
             </div>
           </div>
         </div>
@@ -168,7 +216,7 @@ export function StudentDashboardClient({ proposals, availableProjects, session, 
             Recent Proposals
           </h2>
           <span className="text-[14px] text-[#666666] font-medium">
-            {proposals.length} proposal{proposals.length !== 1 ? 's' : ''}
+            {proposals.length} proposal{proposals.length !== 1 ? "s" : ""}
           </span>
         </div>
 
@@ -177,9 +225,12 @@ export function StudentDashboardClient({ proposals, availableProjects, session, 
             <div className="h-16 w-16 bg-[#f9f7f6] rounded-full border border-border/10 flex items-center justify-center mx-auto mb-6">
               <FileText className="h-8 w-8 text-[#666666]" />
             </div>
-            <h3 className="text-[20px] font-medium mb-3 text-[#181717]">No proposals yet</h3>
+            <h3 className="text-[20px] font-medium mb-3 text-[#181717]">
+              No proposals yet
+            </h3>
             <p className="text-[#666666] mb-8 max-w-md mx-auto font-normal text-[15px] leading-relaxed">
-              Your freelance journey starts here. Browse open projects and submit your first proposal to get hired.
+              Your freelance journey starts here. Browse open projects and
+              submit your first proposal to get hired.
             </p>
             <Link
               href="/projects"
@@ -192,7 +243,8 @@ export function StudentDashboardClient({ proposals, availableProjects, session, 
         ) : (
           <div className="grid gap-3">
             {proposals.slice(0, 10).map((proposal, index) => {
-              const config = statusConfig[proposal.status] || statusConfig.pending;
+              const config =
+                statusConfig[proposal.status] || statusConfig.pending;
               return (
                 <div
                   key={proposal._id}
@@ -200,14 +252,17 @@ export function StudentDashboardClient({ proposals, availableProjects, session, 
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
                   {/* Left accent */}
-                  <div className="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 w-1 h-10 rounded-r-full" style={{ backgroundColor: config.dot }} />
+                  <div
+                    className="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 w-1 h-10 rounded-r-full"
+                    style={{ backgroundColor: config.dot }}
+                  />
 
                   <div className="min-w-0 flex-1 pl-0 md:pl-4">
                     <Link
                       href={`/projects/${proposal.projectId?._id}`}
                       className="text-[17px] font-medium text-[#181717] hover:text-primary transition-colors line-clamp-1 mb-2 block"
                     >
-                      {proposal.projectId?.title || 'Unknown Project'}
+                      {proposal.projectId?.title || "Unknown Project"}
                     </Link>
                     <p className="text-[14px] text-[#666666] line-clamp-2 font-normal leading-relaxed">
                       {proposal.coverLetter}
@@ -222,9 +277,16 @@ export function StudentDashboardClient({ proposals, availableProjects, session, 
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-semibold tracking-wide"
                       style={{ backgroundColor: config.bg, color: config.text }}
                     >
-                      <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: config.dot }} />
+                      <span
+                        className="h-1.5 w-1.5 rounded-full"
+                        style={{ backgroundColor: config.dot }}
+                      />
                       {config.label}
                     </span>
+                    <WithdrawProposalButton
+                      proposalId={proposal._id}
+                      status={proposal.status}
+                    />
                     <Link
                       href={`/projects/${proposal.projectId?._id}`}
                       className="p-2 rounded-xl hover:bg-[#f9f7f6] text-[#999] hover:text-[#181717] transition-colors opacity-0 group-hover:opacity-100"

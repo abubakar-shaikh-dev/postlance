@@ -170,3 +170,35 @@ export async function reviewProposal(proposalId, status) {
   const statusLabel = status === 'accepted' ? 'accepted' : 'declined';
   return { success: true, message: `Proposal ${statusLabel} successfully.` };
 }
+
+export async function withdrawProposal(proposalId) {
+  const session = await verifySession();
+  
+  if (session.role !== 'student') {
+    throw new Error('Only students can withdraw proposals.');
+  }
+
+  try {
+    await connectDB();
+    const proposal = await Proposal.findById(proposalId).populate('projectId');
+    
+    if (!proposal) throw new Error('Proposal not found');
+    if (proposal.studentId.toString() !== session.userId) {
+      throw new Error('Not authorized');
+    }
+    
+    if (proposal.status === 'accepted') {
+      throw new Error('Cannot withdraw an accepted proposal.');
+    }
+
+    await Proposal.findByIdAndDelete(proposalId);
+    
+    revalidatePath(`/projects/${proposal.projectId._id}`);
+    revalidatePath('/student/dashboard');
+    
+    return { success: true };
+  } catch (error) {
+    console.error('Withdraw proposal error:', error);
+    throw new Error(error.message || 'Failed to withdraw proposal.');
+  }
+}

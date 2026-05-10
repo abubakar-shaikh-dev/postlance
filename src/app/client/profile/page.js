@@ -16,7 +16,7 @@ export default async function ClientProfilePage() {
   const completedProjects = projects.filter((p) => p.status === 'completed').length;
 
   return (
-    <div className="container mx-auto py-12 px-4 md:px-8 max-w-5xl">
+    <div className="w-full mx-auto py-12 px-4 md:px-8 max-w-7xl">
       <ClientProfileView
         profile={profile}
         activeProjects={activeProjects}

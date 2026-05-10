@@ -156,7 +156,7 @@ export function FindTalentClient({ students: initialStudents, openProjects, role
   };
 
   return (
-    <div className="container mx-auto py-12 px-4 md:px-8 max-w-7xl">
+    <div className="w-full mx-auto py-12 px-4 md:px-8 max-w-7xl">
       {/* Header */}
       <div className="mb-10">
         <div className="inline-flex items-center px-4 py-2 bg-[#cedefd] text-[#181717] rounded-full text-[13px] font-medium mb-5">

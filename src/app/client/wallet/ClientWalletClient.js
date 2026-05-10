@@ -71,7 +71,7 @@ export function ClientWalletClient({ wallet, projects }) {
   };
 
   return (
-    <div className="container mx-auto py-12 px-4 md:px-8 max-w-5xl">
+    <div className="w-full mx-auto py-12 px-4 md:px-8 max-w-7xl">
       {/* Header */}
       <div className="mb-12">
         <div className="inline-flex items-center px-4 py-2 bg-[#efddfd] text-[#181717] rounded text-[13px] font-medium mb-4">

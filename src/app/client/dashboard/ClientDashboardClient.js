@@ -26,7 +26,7 @@ export function ClientDashboardClient({ projects, proposalCounts }) {
   };
 
   return (
-    <div className="container mx-auto py-12 px-4 md:px-8 max-w-7xl">
+    <div className="w-full mx-auto py-12 px-4 md:px-8 max-w-7xl">
       {/* Header */}
       <div className={`flex ${isMobile ? 'flex-col gap-6' : 'justify-between items-end'} mb-14`}>
         <div className="space-y-3">

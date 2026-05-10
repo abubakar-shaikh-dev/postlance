@@ -1,53 +1,65 @@
-import Link from 'next/link';
-import { Calendar, IndianRupee, ArrowUpRight } from 'lucide-react';
+import Link from "next/link";
+import { Calendar, IndianRupee, ArrowUpRight } from "lucide-react";
 
 function formatDateSafe(dateStr) {
   const d = new Date(dateStr);
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+  return d.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  });
 }
 
 export function ProjectCard({ project, hasApplied }) {
   const deadlineMs = new Date(project.deadline).getTime();
-  const isUrgent = deadlineMs - Date.now() < 3 * 24 * 60 * 60 * 1000 && deadlineMs > Date.now();
+  const isUrgent =
+    deadlineMs - Date.now() < 3 * 24 * 60 * 60 * 1000 &&
+    deadlineMs > Date.now();
 
   return (
-    <Link href={`/projects/${project._id}`} className="block h-full outline-none">
+    <Link
+      href={`/projects/${project._id}`}
+      className="block h-full outline-none"
+    >
       <div className="h-full flex flex-col justify-between p-8 rounded-2xl transition-all duration-300 bg-white border border-border/20 hover:border-border/50 hover:shadow-sm cursor-pointer relative group">
-
         <div className="space-y-6">
           <div className="flex items-start justify-between gap-4">
             <div className="space-y-3">
               {(isUrgent || hasApplied) && (
-              <div className="flex items-center gap-2">
-                {isUrgent && (
-                  <span className="px-2 py-0.5 rounded-full bg-[#ffd3cf] text-[#d04841] text-[11px] font-medium tracking-wide">
-                    Urgent
-                  </span>
-                )}
-                {hasApplied && (
-                  <span className="px-2 py-0.5 rounded-full bg-[#cedefd] text-[#181717] text-[11px] font-medium tracking-wide">
-                    Applied
-                  </span>
-                )}
-              </div>
+                <div className="flex items-center gap-2">
+                  {isUrgent && (
+                    <span className="px-2 py-0.5 rounded-full bg-[#ffd3cf] text-[#d04841] text-[11px] font-medium tracking-wide">
+                      Urgent
+                    </span>
+                  )}
+                  {hasApplied && (
+                    <span className="px-2 py-0.5 rounded-full bg-[#cedefd] text-[#181717] text-[11px] font-medium tracking-wide">
+                      Applied
+                    </span>
+                  )}
+                </div>
               )}
-              <h3 className="text-2xl font-medium text-[#181717] group-hover:text-primary transition-colors line-clamp-2 leading-tight">
+              <h3 className="text-2xl font-medium text-[#181717] group-hover:text-primary transition-colors line-clamp-2 break-words leading-tight">
                 {project.title}
               </h3>
             </div>
-            
+
             <div className="w-8 h-8 flex items-center justify-center opacity-0 -translate-y-1 translate-x-1 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 transition-all duration-300 shrink-0">
               <ArrowUpRight className="h-5 w-5 text-primary" />
             </div>
           </div>
-          
+
           <p className="text-[15px] text-[#666666] line-clamp-2 leading-relaxed font-normal">
             {project.description}
           </p>
 
           <div className="flex flex-wrap gap-2">
             {project.skillsRequired?.slice(0, 4).map((skill) => (
-              <span key={skill} className="px-3 py-1 rounded bg-[#eeebea] text-[#181717] text-[13px] font-medium">
+              <span
+                key={skill}
+                className="px-3 py-1 rounded bg-[#eeebea] text-[#181717] text-[13px] font-medium"
+              >
                 {skill}
               </span>
             ))}

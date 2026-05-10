@@ -11,7 +11,11 @@
       "Bash(node -e \"const pkg = require\\('./node_modules/shadcn/package.json'\\); console.log\\(JSON.stringify\\({exports: pkg.exports, style: pkg.style}, null, 2\\)\\)\")",
       "Bash(npm i *)",
       "WebFetch(domain:www.npmjs.com)",
-      "Bash(npm uninstall *)"
+      "Bash(npm uninstall *)",
+      "Bash(mkdir -p \"e:/student-freelance-platform/src/app/projects/[id]/edit\")"
+    ],
+    "additionalDirectories": [
+      "e:\\student-freelance-platform\\src\\app\\projects\\[id]"
     ]
   }
 }

@@ -6,7 +6,7 @@ import { AlertTriangle } from 'lucide-react';
 
 export default function Error({ error, reset }) {
   return (
-    <div className="container mx-auto py-20 px-4">
+    <div className="w-full mx-auto px-4 md:px-8 py-20 max-w-7xl">
       <Card className="max-w-md mx-auto text-center border-destructive">
         <CardContent className="pt-6 space-y-4">
           <AlertTriangle className="h-10 w-10 text-destructive mx-auto" />

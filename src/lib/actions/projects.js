@@ -148,3 +148,91 @@ export async function updateProjectStatus(projectId, newStatus) {
     }
   }
 }
+
+export async function updateProject(projectId, data) {
+  const session = await verifySession();
+  
+  if (session.role !== 'client') {
+    return { message: 'Only clients can update projects.' };
+  }
+
+  const validated = projectSchema.safeParse({
+    title: data.title,
+    description: data.description,
+    skillsRequired: data.skillsRequired || [],
+    budget: data.budget,
+    deadline: data.deadline,
+  });
+
+  if (!validated.success) {
+    return {
+      errors: validated.error.flatten().fieldErrors,
+      message: 'Please fix the errors above.',
+    };
+  }
+
+  try {
+    await connectDB();
+    const project = await Project.findById(projectId);
+    
+    if (!project) return { message: 'Project not found' };
+    if (project.clientId.toString() !== session.userId) {
+      return { message: 'Not authorized' };
+    }
+    
+    if (project.status !== 'open') {
+      return { message: 'Only open projects can be edited once started.' };
+    }
+
+    Object.assign(project, validated.data);
+    await project.save();
+
+    revalidatePath(`/projects/${projectId}`);
+    revalidatePath(`/client/dashboard`);
+  } catch (error) {
+    console.error('Update project error:', error);
+    return { message: 'Failed to update project.' };
+  }
+  
+  redirect(`/projects/${projectId}`);
+}
+
+export async function deleteProject(projectId) {
+  const session = await verifySession();
+
+  if (session.role !== 'client') {
+    throw new Error('Only clients can delete projects.');
+  }
+
+  let deleted = false;
+  
+  try {
+    await connectDB();
+    const project = await Project.findById(projectId);
+    
+    if (!project) throw new Error('Project not found');
+    if (project.clientId.toString() !== session.userId) {
+      throw new Error('Not authorized');
+    }
+    
+    if (project.status === 'in_progress' || project.status === 'completed') {
+       throw new Error(`Cannot delete a project that is ${project.status}`);
+    }
+
+    await Project.findByIdAndDelete(projectId);
+    
+    // Also remove related proposals
+    await Proposal.deleteMany({ projectId });
+    
+    deleted = true;
+  } catch (error) {
+    console.error('Delete project error:', error);
+    throw new Error(error.message || 'Failed to delete project.');
+  }
+  
+  if (deleted) {
+    revalidatePath('/client/dashboard');
+    revalidatePath('/projects');
+    redirect('/client/dashboard');
+  }
+}
